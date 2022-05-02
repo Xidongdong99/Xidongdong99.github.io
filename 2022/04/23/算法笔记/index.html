@@ -158,6 +158,8 @@
 <p>问总共有多少条不同的路径？</p>
 <p>示例：</p>
 <p><img src="https://assets.leetcode.com/uploads/2018/10/22/robot_maze.png" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：m = 3, n = 7</span><br><span class="line">输出：28</span><br></pre></td></tr></table></figure>
+
 <p>思路：</p>
 <p>dp[i][j]为走到每一个网格的走法种数，由于只能往右和往下走，所以第一行和第一列都是只有直线一种走法，而其他的网格可以看做是由上方的或者是左方的网格移动一步得来的，也就是说dp[i][j]&#x3D;dp[i-1][j]+dp[i][j-1]</p>
 <p><img src="https://img-blog.csdnimg.cn/20201209113631392.png" alt="62.不同路径1"></p>
