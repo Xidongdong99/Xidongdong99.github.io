@@ -184,8 +184,109 @@
 <p>本题中dp[i]表示从1到i有几棵结构不同的二叉搜索树，dp[0]初始化设为1，表示0个节点只有一种情况，同理dp[1]初始化设为1，表示1个节点只有一种情况，本题用到一个等效的思想。例如：如果节点为1，2，3，4，5，那么可以表示dp[5]，如果是1，4，6，7，9，那么他也是和前面是一样的，是等效的，也是dp[5]，因此，解题思路就为：遍历 i&lt;n 求dp[i]，而对于每一个i而言，他的头结点有i种情况（即i棵树），每一种情况（每一棵树）下可下分为左子树和右子树，在头结点为j的情况下，左子树的节点们必定都小于j，因此有j-1个节点，而j-1个节点的排列方式共dp[j-1]种，同理右子树的节点们都必定大于j，所以共有i-j个节点，这i-j个节点共有dp[i-j]种情况，因此对于头结点为j的树共有 *<em>左子树*右子树（即dp[j-1]<em>dp[i-j]）</em></em> 种可能。我们只需遍历 j&lt;&#x3D;i 的所有情况即可得到dp[i]的值。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">numTrees</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="type">int</span> i,j;</span><br><span class="line">        <span class="type">int</span>[] dp = <span class="keyword">new</span> <span class="title class_">int</span>[n+<span class="number">1</span>];</span><br><span class="line">        dp[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">        dp[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">        <span class="comment">// i表示第dp[i]个数的二叉搜索树的数量</span></span><br><span class="line">        <span class="comment">// j表示计算第dp[i]个数时第一个头结点为j时，左节点个数为[j-1]，右节点个数为[i-j]</span></span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">2</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(j=<span class="number">1</span>;j&lt;=i;j++)&#123;</span><br><span class="line">                dp[i]+=dp[j-<span class="number">1</span>]*dp[i-j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h3><span id="01背包">01背包</span></h3><p>有n件物品和一个能背重量为w的背包，第i件物品的重量是weight[i]，得到的价值是value[i]。求解将那些物品放入背包里背包中物品价值总和最大。</p>
+<p>用dp[i][j]来表示从[0~i]的物品中选择装入最大容量为j的背包时背包的最大总价值。</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">0</th>
+<th align="left">1</th>
+<th align="left">2</th>
+<th align="left">3</th>
+<th align="left">4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">0</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">0</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>初始化：第一行与第一列设为0。意义：dp[i][0]：从前i个物品中选择任意个物品装入容量为0的背包最大价值为0。dp[0][j]：将0个物品装入最大容量为j的背包中。背包的最大总价值为0。</p>
+<p>对于第i个物品</p>
+<ul>
+<li><p>若weight[i]&gt;j（即如果第i个物品重量&gt;背包容量）则dp[i][j]&#x3D;dp[i-1][j]（即从0到i选物品装入背包的最大总价值等于将从0到i-1选物品装入背包的总价值）</p>
+</li>
+<li><p>若weight[i]&lt;j，则分为两种情况：</p>
+</li>
+</ul>
+<p>(1)将该物品放入背包，则有dp[i][j]&#x3D;dp[i-1][j-weight[i]]+value[i]</p>
+<p>(2)不将物品放入背包，则有dp[i][j]&#x3D;dp[i-1][j]</p>
+<p>综上dp[i][j]&#x3D;Max(dp[i-1][j-weight[i]]+value[i]，dp[i-1][j])</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">int</span>[] weight = &#123;<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br><span class="line">    <span class="type">int</span>[] value = &#123;<span class="number">15</span>, <span class="number">20</span>, <span class="number">30</span>&#125;;</span><br><span class="line">    <span class="type">int</span> <span class="variable">bagsize</span> <span class="operator">=</span> <span class="number">4</span>;</span><br><span class="line">    testweightbagproblem(weight, value, bagsize);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">testweightbagproblem</span><span class="params">(<span class="type">int</span>[] weight, <span class="type">int</span>[] value, <span class="type">int</span> bagsize)</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">wlen</span> <span class="operator">=</span> weight.length, value0 = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//定义dp数组：dp[i][j]表示背包容量为j时，前i个物品能获得的最大价值</span></span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[wlen + <span class="number">1</span>][bagsize + <span class="number">1</span>];</span><br><span class="line">    <span class="comment">//初始化：背包容量为0时，能获得的价值都为0</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt;= wlen; i++)&#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = value0;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//遍历顺序：先遍历物品，再遍历背包容量</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= wlen; i++)&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt;= bagsize; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span> (j &lt; weight[i - <span class="number">1</span>])&#123;</span><br><span class="line">                dp[i][j] = dp[i - <span class="number">1</span>][j];</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                dp[i][j] = Math.max(dp[i - <span class="number">1</span>][j], dp[i - <span class="number">1</span>][j - weight[i - <span class="number">1</span>]] + value[i - <span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//打印dp数组</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt;= wlen; i++)&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt;= bagsize; j++)&#123;</span><br><span class="line">            System.out.print(dp[i][j] + <span class="string">&quot; &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.print(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
+<table>
+<thead>
+<tr>
+<th></th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>15</td>
+<td>15</td>
+<td>20</td>
+<td>35</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>15</td>
+<td>15</td>
+<td>20</td>
+<td>35</td>
+</tr>
+</tbody></table>
 
     </div>
 
